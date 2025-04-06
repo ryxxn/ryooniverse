@@ -17,7 +17,7 @@ RUN pnpm install
 COPY . .
 
 # Nest 빌드
-RUN pnpm build
+# RUN pnpm build
 
 # 포트 노출
 EXPOSE 8777
