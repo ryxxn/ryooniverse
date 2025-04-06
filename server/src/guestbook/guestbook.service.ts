@@ -26,6 +26,14 @@ export class GuestbookService {
       },
     });
 
+    const filteredGuestbooks = guestbooks.map((guestbook) => {
+      const { isPrivate, message, ...rest } = guestbook;
+      return {
+        ...rest,
+        message: isPrivate ? '비공개 방명록입니다.' : message,
+      };
+    });
+
     const total = await this.prisma.guestbook.count();
     const totalPage = Math.ceil(total / size);
 
@@ -34,7 +42,7 @@ export class GuestbookService {
       size,
       total,
       totalPage,
-      data: guestbooks,
+      data: filteredGuestbooks,
     };
   }
 
