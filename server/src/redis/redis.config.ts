@@ -1,14 +1,13 @@
 import { createClient, RedisClientType } from 'redis';
-import { ConfigService } from '@nestjs/config';
+import { REDIS_HOST, REDIS_PORT } from 'src/lib/constants';
 
 export class RedisClient {
   private static instance: RedisClientType | null = null;
 
   static getInstance(): RedisClientType {
     if (!RedisClient.instance) {
-      const configService = new ConfigService();
       RedisClient.instance = createClient({
-        url: `redis://${configService.get<string>('REDIS_HOST')}:${configService.get<string>('REDIS_PORT')}`,
+        url: `redis://${REDIS_HOST}:${REDIS_PORT}`,
       });
 
       RedisClient.instance.on('error', (err) => {
