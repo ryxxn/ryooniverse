@@ -1,2 +1,9 @@
 # OS
 .DS_Store
+
+# env
+.env
+
+# server
+server/dist
+server/node_modules
