@@ -8,23 +8,22 @@ datasource db {
 }
 
 model User {
-  id           String      @id @default(uuid())
-  ipAddress    String
-  username     String
-  createdAt    DateTime    @default(now())
-  character    String?
-  guestbooks   Guestbook[]
-  accessLogs   AccessLog[]
+  id         String      @id @default(uuid())
+  ipAddress  String
+  username   String
+  createdAt  DateTime    @default(now())
+  character  String?
+  accessLogs AccessLog[]
+  guestbooks Guestbook[]
 }
-
 
 model Guestbook {
   id        String   @id @default(uuid())
   userId    String
   message   String
+  isPrivate Boolean  @default(false)
   createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AccessLog {
@@ -32,6 +31,5 @@ model AccessLog {
   userId    String
   timestamp DateTime @default(now())
   ipAddress String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
