@@ -2,7 +2,7 @@
 FROM node:18
 
 # 2. 작업 디렉토리 설정
-WORKDIR /ryooniverse/server
+WORKDIR /usr/src/ryooniverse/server
 
 # 3. 의존성 설치를 위한 파일 복사
 COPY package.json pnpm-lock.yaml ./
