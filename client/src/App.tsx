@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import HomePage from './pages/home';
-import WelcomePage from './pages/wellcome';
 import { ReactQueryProvider, ToastProvider } from './shared/providers';
 
 export default function App() {
@@ -11,8 +10,7 @@ export default function App() {
       <ReactQueryProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/" element={<HomePage />} />
           </Routes>
         </BrowserRouter>
       </ReactQueryProvider>
