@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: .
+    container_name: ryooniverse_backend
+    ports:
+      - "8777:8777"
+    env_file: .env
+    depends_on:
+      - redis
+    networks:
+      - ryooniverse_net
+
+  redis:
+    image: redis:latest
+    container_name: ryooniverse_redis
+    ports:
+      - "6380:6379"
+    networks:
+      - ryooniverse_net
+
+networks:
+  ryooniverse_net:
+    driver: bridge
