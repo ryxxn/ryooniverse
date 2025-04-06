@@ -13,11 +13,10 @@ export function startGameLoop(ctx: CanvasRenderingContext2D) {
 // render
 let characterImage: HTMLImageElement;
 
-export function loadCharacterImage(): Promise<void> {
+export function loadCharacterImage(character: string): Promise<void> {
   return new Promise((resolve) => {
     characterImage = new Image();
-    // ! Will be replaced with a dynamic image URL
-    characterImage.src = CANVAS_CONSTANT.CHARACTER_IMAGE('1');
+    characterImage.src = CANVAS_CONSTANT.CHARACTER_IMAGE(character);
     characterImage.onload = () => resolve();
   });
 }
