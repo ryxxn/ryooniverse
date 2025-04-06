@@ -13,3 +13,5 @@ export const POSTGRES_DB = process.env.POSTGRES_DB;
 
 export const REDIS_HOST = process.env.REDIS_HOST;
 export const REDIS_PORT = process.env.REDIS_PORT;
+
+export const IS_PRODUCTION = process.env.NODE_ENV === 'production';
