@@ -21,7 +21,7 @@ export class UsersController {
       secure: IS_PRODUCTION,
       sameSite: IS_PRODUCTION ? 'none' : 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-      path: '/api',
+      path: '/',
     });
 
     return res.json(user);
