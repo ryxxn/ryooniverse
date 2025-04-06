@@ -11,7 +11,7 @@ export class GuestbookController {
     @Query('page') page: number = 1,
     @Query('size') size: number = 10,
   ) {
-    return await this.guestbookService.getAll({ page, size });
+    return await this.guestbookService.getAll({ page: +page, size: +size });
   }
 
   @Post('')
