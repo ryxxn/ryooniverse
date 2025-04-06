@@ -46,7 +46,7 @@ export const useGuestbooks = (
     queryFn: getGuestbooks,
     initialPageParam: 1,
     getNextPageParam: (lastData: any) => {
-      const isEnd = lastData?.page === lastData?.totalPages;
+      const isEnd = lastData?.page === lastData?.totalPage;
       return isEnd ? undefined : lastData?.page + 1;
     },
     gcTime: Infinity,
