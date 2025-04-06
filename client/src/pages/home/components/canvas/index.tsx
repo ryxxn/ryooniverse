@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { CANVAS_CONSTANT } from "./canvas.constants";
 import { setupInput, loadCharacterImage, loadMap, startGameLoop } from "./canvas.utils";
 
 export default function CanvasStage() {
@@ -17,5 +18,10 @@ export default function CanvasStage() {
     return cleanup;
   }, []);
 
-  return <canvas ref={canvasRef} width={1200} height={800} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      width={CANVAS_CONSTANT.MAP_WIDTH}
+      height={CANVAS_CONSTANT.MAP_HEIGHT}
+    />);
 }
