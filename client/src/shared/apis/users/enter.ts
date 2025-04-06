@@ -1,6 +1,10 @@
 import { PATH_API } from '../../constants/api-path';
 import { IUser } from '../../types';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  useQuery,
+  UseQueryOptions,
+  UseQueryResult,
+} from '@tanstack/react-query';
 import { queryKeyFactory } from '../query-key-factory';
 
 export const enterUser = async () => {
@@ -29,5 +33,5 @@ export const useEnterUser = (
     gcTime: Infinity,
     staleTime: Infinity,
     ...other,
-  });
+  }) as UseQueryResult<IUser, Error>;
 };
