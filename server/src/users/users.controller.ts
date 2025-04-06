@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Res } from '@nestjs/common';
+import { Controller, Patch, Post, Req, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request, Response } from 'express';
 import { getClientIp } from 'src/lib/constants/utils';
@@ -22,5 +22,12 @@ export class UsersController {
     });
 
     return res.json(user);
+  }
+
+  @Patch('')
+  async update(@Req() req: Request) {
+    const userIdFromCookie = req.cookies?.user_id;
+
+    return await this.usersService.update(userIdFromCookie, req.body);
   }
 }
