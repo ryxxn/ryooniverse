@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String      @id @default(uuid())
+  ipAddress    String
+  username     String
+  createdAt    DateTime    @default(now())
+  character    String?
+  guestbooks   Guestbook[]
+  accessLogs   AccessLog[]
+}
+
+
+model Guestbook {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AccessLog {
+  id        String   @id @default(uuid())
+  userId    String
+  timestamp DateTime @default(now())
+  ipAddress String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
