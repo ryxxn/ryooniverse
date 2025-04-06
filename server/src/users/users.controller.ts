@@ -2,6 +2,7 @@ import { Controller, Patch, Post, Req, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request, Response } from 'express';
 import { getClientIp } from 'src/lib/constants/utils';
+import { IS_PRODUCTION } from 'src/lib/constants';
 
 @Controller('users')
 export class UsersController {
@@ -17,8 +18,10 @@ export class UsersController {
     // set cookie
     res.cookie('user_id', user.id, {
       httpOnly: true,
+      secure: IS_PRODUCTION,
+      sameSite: IS_PRODUCTION ? 'none' : 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-      path: '/',
+      path: '/api',
     });
 
     return res.json(user);

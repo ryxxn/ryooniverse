@@ -17,6 +17,14 @@ export class UsersService {
 
     if (userId) {
       user = await this.prisma.user.findUnique({ where: { id: userId } });
+      if (user.ipAddress !== ip) {
+        await this.prisma.user.update({
+          where: { id: userId },
+          data: {
+            ipAddress: ip,
+          },
+        });
+      }
     }
 
     if (!user) {
