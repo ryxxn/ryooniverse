@@ -18,6 +18,10 @@ export class GuestbookController {
   async enter(@Req() req: Request, @Res() res: Response) {
     const userIdFromCookie = req.cookies?.user_id;
 
+    if (!userIdFromCookie) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
     const guestbook = await this.guestbookService.create(
       userIdFromCookie,
       req.body,
