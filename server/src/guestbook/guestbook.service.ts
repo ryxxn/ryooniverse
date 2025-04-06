@@ -9,7 +9,7 @@ export class GuestbookService {
   async getAll({ page, size }) {
     const skip = (page - 1) * size;
     const take = size;
-    const guestbook = await this.prisma.guestbook.findMany({
+    const guestbooks = await this.prisma.guestbook.findMany({
       skip,
       take,
       orderBy: {
@@ -34,7 +34,7 @@ export class GuestbookService {
       size,
       total,
       totalPage,
-      guestbook,
+      data: guestbooks,
     };
   }
 
