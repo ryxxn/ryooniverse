@@ -4,6 +4,8 @@
 `ryooniverse`는 ryoon + universe로  
 저의 **홈서버 세상**입니다.
 
+![image](https://github.com/user-attachments/assets/950fb0d8-f8dc-4363-a850-649a9b9ed5a2)
+
 ---
 
 ## Client
