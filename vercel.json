@@ -1,5 +1,3 @@
 {
-  "name": "ryooniverse",
-  "rootDirectory": "client",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':client/'"
 }
