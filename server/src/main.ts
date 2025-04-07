@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { PrismaService } from 'prisma/prisma.service';
+import { PORT } from './lib/constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,6 @@ async function bootstrap() {
   prismaService.enableShutdownHook(app);
 
   app.use(cookieParser());
-  await app.listen(8777);
+  await app.listen(PORT);
 }
 bootstrap();
