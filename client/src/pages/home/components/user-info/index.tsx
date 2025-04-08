@@ -1,16 +1,20 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeyFactory } from '../../../../shared/apis/query-key-factory';
+import { useUpdateUser } from '../../../../shared/apis/users/update';
+import { debounce } from '../../../../shared/utils/debounce';
+import NameChangeButton from './name-change-button';
 
 const CHARACTERS = ['1', '2', '3', '4', '5'];
 
 const UserInfo = () => {
-  /**
-   * ! 임시로 로컬에서만처리
-   * 추후 배치 처리 예정
-   */
   const queryClient = useQueryClient();
+  const updateMutation = useUpdateUser();
+
+  // 마지막으로 변경한지 5초 후 요청
+  const debouncedUpdate = debounce(updateMutation.mutate, 5_000);
 
   const onChangeCharacter = (character: string) => {
+    debouncedUpdate({ character });
     queryClient.setQueryData(queryKeyFactory.users.me, (oldData: any) => {
       if (!oldData) return oldData;
 
@@ -23,14 +27,17 @@ const UserInfo = () => {
 
   return (
     <section className="bg-white p-4 rounded-lg shadow-lg">
-      <h2 className="text-lg font-bold mb-2">캐릭터 변경</h2>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-lg font-bold">캐릭터 변경</h2>
+        <NameChangeButton />
+      </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-around">
         {CHARACTERS.map((character) => (
-          <div
+          <button
             key={character}
-            role="button"
-            className="flex items-center mb-2"
+            type="button"
+            className="flex items-center mb-2 cursor-pointer hover:scale-120 transition-transform duration-200"
             onClick={() => onChangeCharacter(character)}
           >
             <img
@@ -38,7 +45,7 @@ const UserInfo = () => {
               alt={character}
               className="w-10 h-10 mr-2"
             />
-          </div>
+          </button>
         ))}
       </div>
     </section>
