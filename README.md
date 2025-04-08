@@ -36,3 +36,9 @@
 커밋 메시지는
 `[client] feat: 작업내용`
 과 같이 작성한다.
+
+---
+
+## Deployment
+
+배포는 `production` 브랜치에 커밋하여 배포한다.
