@@ -5,3 +5,9 @@ export interface IUser {
   createdAt: Date;
   character: string;
 }
+
+export interface ICharacter
+  extends Pick<IUser, 'id' | 'character' | 'username'> {
+  x: number;
+  y: number;
+}
