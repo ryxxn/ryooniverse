@@ -88,6 +88,25 @@ export class WsGateway implements OnGatewayDisconnect {
     this.server.emit('move', data);
   }
 
+  // 유저 업데이트
+  @SubscribeMessage('update_user')
+  async handleUpdateUser(
+    @MessageBody() user: { id: string; username: string; character?: string },
+  ) {
+    // Redis에 유저 상태 저장
+    const prev = await redisClient.hGetAll(`user:${user.id}`);
+    await redisClient.hSet(`user:${user.id}`, {
+      ...prev,
+      id: user.id,
+      username: user.username,
+      character: user.character || prev.character,
+    });
+    await redisClient.expire(`user:${user.id}`, 3600);
+
+    // 모든 클라이언트에 브로드캐스트
+    this.server.emit('update_user', user);
+  }
+
   // 휘발성 채팅 처리
   @SubscribeMessage('chat')
   async handleChat(@MessageBody() data: { chat: string } & UserDto) {
