@@ -90,8 +90,8 @@ export class WsGateway implements OnGatewayDisconnect {
 
   // 휘발성 채팅 처리
   @SubscribeMessage('chat')
-  async handleChat(@MessageBody() data: { username: string; message: string }) {
-    console.log(`💬 Chat: ${data.username}: ${data.message}`);
+  async handleChat(@MessageBody() data: { chat: string } & UserDto) {
+    console.log(`💬 Chat: ${data.username}: ${data.chat}`);
 
     // Redis Pub/Sub으로 채팅 메시지 브로드캐스트
     // await redisClient.publish('chat_channel', JSON.stringify(data));
