@@ -1,26 +1,24 @@
 import { create } from 'zustand';
-
-export interface Character {
-  id: string;
-  x: number;
-  y: number;
-  characterId: string;
-}
+import { ICharacter } from '../../../../shared/types';
 
 interface CanvasState {
-  myCharacter: Character;
-  otherCharacters: Character[];
+  myCharacter: ICharacter;
+  otherCharacters: ICharacter[];
 
   setMyPosition: (x: number, y: number) => void;
-  updateOthers: (characters: Character[]) => void;
+  setMyCharacter: (user: Partial<ICharacter>) => void;
+  updateOthers: (
+    updater: ICharacter[] | ((prev: ICharacter[]) => ICharacter[])
+  ) => void;
 }
 
 export const useCanvasStore = create<CanvasState>((set) => ({
   myCharacter: {
     id: 'me',
+    username: '',
     x: 100,
     y: 100,
-    characterId: '1',
+    character: '1',
   },
   otherCharacters: [],
 
@@ -28,6 +26,16 @@ export const useCanvasStore = create<CanvasState>((set) => ({
     set((state) => ({
       myCharacter: { ...state.myCharacter, x, y },
     })),
+  setMyCharacter: (user) =>
+    set((state) => ({
+      myCharacter: { ...state.myCharacter, ...user },
+    })),
 
-  updateOthers: (characters) => set({ otherCharacters: characters }),
+  updateOthers: (updater) =>
+    set((state) => ({
+      otherCharacters:
+        typeof updater === 'function'
+          ? updater(state.otherCharacters)
+          : updater,
+    })),
 }));
