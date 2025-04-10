@@ -1,6 +1,7 @@
 import { PATH_API } from '../../constants/api-path';
 import { IUser } from '../../types';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { socket } from '../../utils';
 
 export const updateUser = async (data: Partial<IUser>) => {
   const response = await fetch(PATH_API.users.update, {
@@ -28,6 +29,15 @@ export const useUpdateUser = (
 ) => {
   return useMutation({
     mutationFn: updateUser,
+    onSuccess: (data) => {
+      const { id, username, character } = data;
+      // socket
+      socket.emit('update_user', {
+        id,
+        username,
+        character,
+      });
+    },
     ...options,
   });
 };
