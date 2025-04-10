@@ -8,10 +8,35 @@ import {
 } from './canvas.utils';
 import { useEnterUser } from '../../../../shared/apis/users/enter';
 import { useCanvasStore } from './canvas.store';
+import { socketService } from './canvas.socket';
+import { ICharacter } from '../../../../shared/types';
+
+const UserName = ({
+  user,
+}: {
+  user: Pick<ICharacter, 'username' | 'x' | 'y'>;
+}) => {
+  const { x, y, username } = user;
+  return (
+    <div
+      className="absolute text-white text-sm font-bold"
+      style={{
+        top: y + 100,
+        left: x + 50,
+        transform: 'translateX(-50%) translateY(-50%)',
+      }}
+    >
+      <div className="bg-black bg-opacity-60 px-2 py-1 rounded-lg">
+        {username}
+      </div>
+    </div>
+  );
+};
 
 export default function CanvasStage() {
   const { data } = useEnterUser({ enabled: false });
-  const { x, y } = useCanvasStore((state) => state.myCharacter);
+  const { x, y, username } = useCanvasStore((state) => state.myCharacter);
+  const { setMyCharacter, otherCharacters } = useCanvasStore();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -30,6 +55,24 @@ export default function CanvasStage() {
     return cleanup;
   }, [data]);
 
+  // socket
+  useEffect(() => {
+    if (!data) return;
+
+    setMyCharacter(data);
+
+    socketService.move();
+    socketService.chat();
+    socketService.usersUpdate();
+    socketService.userLeft();
+
+    return () => {
+      socketService.disconnect();
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   return (
     <div className="relative">
       <canvas
@@ -37,18 +80,18 @@ export default function CanvasStage() {
         width={CANVAS_CONSTANT.MAP_WIDTH}
         height={CANVAS_CONSTANT.MAP_HEIGHT}
       />
-      <div
-        className="absolute text-white text-sm font-bold"
-        style={{
-          top: y + 100,
-          left: x + 50,
-          transform: 'translateX(-50%) translateY(-50%)',
-        }}
-      >
-        <div className="bg-black bg-opacity-60 px-2 py-1 rounded-lg">
-          {data?.username}
-        </div>
-      </div>
+
+      <UserName user={{ username, x, y }} />
+      {otherCharacters.map((character) => (
+        <UserName
+          key={character.id}
+          user={{
+            username: character.username,
+            x: character.x,
+            y: character.y,
+          }}
+        />
+      ))}
     </div>
   );
 }
