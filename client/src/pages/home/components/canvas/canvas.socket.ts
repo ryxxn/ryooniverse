@@ -47,11 +47,17 @@ export const socketService = {
   },
   // chat
   chat: () => {
-    // socket.on('chat', (data) => {
-    //   console.log('채팅 도착:', data);
-    //   // 예: { username: 'ryoon', message: '안녕~' }
-    //   // → 메시지 리스트에 추가
-    // });
+    socket.on('chat', (data) => {
+      const { id, chat } = data;
+      const { setChat, clearChat } = useCanvasStore.getState();
+
+      setChat(id, chat);
+
+      // 5초 후 채팅 지우기
+      setTimeout(() => {
+        clearChat(id);
+      }, 5_000);
+    });
   },
   // disconnect
   disconnect: () => {
