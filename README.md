@@ -6,6 +6,9 @@
 
 ![image](https://github.com/user-attachments/assets/950fb0d8-f8dc-4363-a850-649a9b9ed5a2)
 
+사용자 멀티가 가능하며 5초 지속 휘발성 채팅도 가능해요  
+채팅은 DB에 저장되지 않지만, 욕설 및 폭언은 삼가 부탁 드립니다 ㅎㅎ
+
 ---
 
 ## Client
