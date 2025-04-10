@@ -6,6 +6,7 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 import { queryKeyFactory } from '../query-key-factory';
+import { socket } from '../../utils';
 
 export const enterUser = async () => {
   const response = await fetch(PATH_API.users.enter, {
@@ -20,7 +21,14 @@ export const enterUser = async () => {
     throw new Error('Failed to enter user');
   }
 
-  return response.json();
+  const user: IUser = await response.json();
+  // socket
+  socket.emit('join', {
+    ...user,
+    position: { x: 100, y: 100 },
+  });
+
+  return user;
 };
 
 // query
