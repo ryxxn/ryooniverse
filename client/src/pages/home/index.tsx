@@ -11,6 +11,11 @@ export default function HomePage() {
 
   return (
     <div className="p-12 flex justify-center items-center bg-black h-screen">
+      <div className="fixed top-4 right-4 p-4 text-white font-semibold">
+        채팅을 입력하려면 <span style={{ fontFamily: 'initial' }}>'/'</span>를
+        입력하세요.
+      </div>
+
       <main className="min-w-6xl max-w-7xl flex gap-4 h-full items-center">
         <CanvasStage />
 

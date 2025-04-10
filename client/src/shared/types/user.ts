@@ -10,4 +10,5 @@ export interface ICharacter
   extends Pick<IUser, 'id' | 'character' | 'username'> {
   x: number;
   y: number;
+  chat?: string | null;
 }
