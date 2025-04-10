@@ -66,6 +66,7 @@ export default function CanvasStage() {
     socketService.move();
     socketService.chat();
     socketService.usersUpdate();
+    socketService.updateOneUser();
     socketService.userLeft();
 
     return () => {
