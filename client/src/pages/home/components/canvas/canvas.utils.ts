@@ -1,12 +1,29 @@
 import { useCanvasStore } from './canvas.store';
 import { CANVAS_CONSTANT } from './canvas.constants';
+import { socket } from '../../../../shared/utils';
+import { throttle } from '../../../../shared/utils/throttle';
+
+const throttledEmitMove = throttle(
+  (user: { id: string; x: number; y: number; character: string }) => {
+    const { x, y, ...rest } = user;
+    const position = { x, y };
+    socket.emit('move', { position, ...rest });
+  },
+  50
+);
+
+let isLoopRunning = false;
 
 export function startGameLoop(ctx: CanvasRenderingContext2D) {
+  if (isLoopRunning) return; // 이미 루프 돌고 있으면 중복 방지
+  isLoopRunning = true;
+
   function loop() {
     updateMyPlayer(getKeys());
     draw(ctx);
     requestAnimationFrame(loop);
   }
+
   loop();
 }
 
@@ -51,7 +68,10 @@ export function updateMyPlayer(keys: Set<string>) {
   if (keys.has('ArrowLeft')) x = Math.max(0, x - speed);
   if (keys.has('ArrowRight')) x = Math.min(canvasWidth - charSize, x + speed);
 
-  setMyPosition(x, y);
+  if (x !== myCharacter.x || y !== myCharacter.y) {
+    setMyPosition(x, y);
+    throttledEmitMove(myCharacter);
+  }
 }
 
 // others
@@ -59,7 +79,7 @@ export function drawOthers(ctx: CanvasRenderingContext2D) {
   const others = useCanvasStore.getState().otherCharacters;
   others.forEach((char) => {
     const img = new Image();
-    img.src = CANVAS_CONSTANT.CHARACTER_IMAGE(char.characterId);
+    img.src = CANVAS_CONSTANT.CHARACTER_IMAGE(char.character);
     ctx.drawImage(
       img,
       char.x,
