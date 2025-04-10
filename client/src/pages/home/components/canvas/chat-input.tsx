@@ -2,6 +2,7 @@ import React from 'react';
 import { ICharacter } from '../../../../shared/types';
 import { useEnterUser } from '../../../../shared/apis/users/enter';
 import { socket } from '../../../../shared/utils';
+import toast from 'react-hot-toast';
 
 const ChatInput = ({
   user,
@@ -17,7 +18,10 @@ const ChatInput = ({
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (value.length > 20) return;
+    if (value.length > 20) {
+      toast.error('채팅은 20자 이내로 입력해주세요.');
+      return;
+    }
     if (value.trim() === '') {
       setOpenChat(false);
       return;
