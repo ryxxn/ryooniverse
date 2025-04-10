@@ -14,7 +14,10 @@ const ChatView = ({ user }: { user: Pick<ICharacter, 'x' | 'y' | 'chat'> }) => {
         transform: 'translateX(-50%) translateY(-50%)',
       }}
     >
-      <div className="bg-black bg-opacity-60 px-2 py-1 rounded-lg">{chat}</div>
+      <div className="px-2 py-1 relative">
+        <div className="absolute inset-0 size-full bg-black opacity-60 rounded-lg" />
+        <span className="relative z-50">{chat}</span>
+      </div>
     </div>
   );
 };
