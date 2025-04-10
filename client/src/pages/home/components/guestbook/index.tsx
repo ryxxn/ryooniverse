@@ -16,8 +16,8 @@ const Guestbooks = () => {
   const isNotData = !isLoading && !data?.pages[0]?.data?.length;
 
   return (
-    <section className="flex flex-col flex-1 bg-white p-4 rounded-lg shadow-lg mt-4">
-      <div className="flex items-center justify-between">
+    <section className="flex flex-col flex-1 bg-white p-4 pt-0 rounded-lg shadow-lg mt-4 overflow-y-auto">
+      <div className="sticky top-0 pt-4 bg-white flex items-center justify-between">
         <h2 className="text-lg font-bold mb-2">방명록</h2>
         <AddGuestbookButton />
       </div>
@@ -36,13 +36,10 @@ const Guestbooks = () => {
         ))}
       {hasNextPage && (
         <button
-          className="flex items-center mt-4 mb-2 text-sm text-gray-700"
+          className="flex items-center justify-end mt-4 mb-2 text-sm text-gray-800 font-bold hover:text-gray-600 transition-colors duration-200"
           onClick={() => fetchNextPage()}
         >
-          <div className="w-8 h-px bg-divider" />
-          <span className="ml-4">
-            {isFetchingNextPage ? '불러오는 중..' : '더보기'}
-          </span>
+          {isFetchingNextPage ? '불러오는 중..' : '더보기'}
         </button>
       )}
     </section>
