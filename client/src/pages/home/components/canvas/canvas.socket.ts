@@ -38,6 +38,18 @@ export const socketService = {
     });
   },
 
+  updateOneUser: () => {
+    socket.on('update_user', (user: ICharacter) => {
+      const { myCharacter, updateOthers } = useCanvasStore.getState();
+
+      if (user.id !== myCharacter.id) {
+        updateOthers((prev) => {
+          return prev.map((c) => (c.id === user.id ? { ...c, ...user } : c));
+        });
+      }
+    });
+  },
+
   // user left
   userLeft: () => {
     socket.on('user:left', (userId) => {
