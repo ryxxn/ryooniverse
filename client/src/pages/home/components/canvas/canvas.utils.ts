@@ -129,3 +129,7 @@ export function setupInput() {
 export function getKeys(): Set<string> {
   return keys;
 }
+
+export function stopGameLoop() {
+  isLoopRunning = false;
+}
