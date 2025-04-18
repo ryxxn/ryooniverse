@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { CANVAS_CONSTANT } from './canvas.constants';
 import {
-  setupInput,
-  loadCharacterImage,
   loadMap,
+  setupInput,
+  stopGameLoop,
   startGameLoop,
+  loadCharacterImage,
 } from './canvas.utils';
 import { useEnterUser } from '../../../../shared/apis/users/enter';
 import { useCanvasStore } from './canvas.store';
@@ -44,17 +45,18 @@ export default function CanvasStage() {
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) return;
+    if (!ctx || !data?.character) return;
 
     const cleanup = setupInput();
 
-    Promise.all([loadCharacterImage(data?.character ?? '1'), loadMap()]).then(
-      () => {
-        startGameLoop(ctx);
-      }
-    );
+    Promise.all([loadCharacterImage(data.character), loadMap()]).then(() => {
+      startGameLoop(ctx);
+    });
 
-    return cleanup;
+    return () => {
+      cleanup();
+      stopGameLoop();
+    };
   }, [data]);
 
   // socket
