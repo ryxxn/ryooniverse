@@ -14,7 +14,10 @@ export default function App() {
       <ReactQueryProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={isDesktop ? <HomePage />: <BlockMobile />} />
+            <Route
+              path="/"
+              element={isDesktop ? <HomePage /> : <BlockMobile />}
+            />
             <Route path="/*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
