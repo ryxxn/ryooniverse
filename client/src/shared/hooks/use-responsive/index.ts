@@ -9,7 +9,7 @@ interface Store {
 }
 
 const useStore = create<Store>(() => ({
-  viewportType: 'desktop',
+  viewportType: 'mobile',
   isInitialized: false,
 }));
 
