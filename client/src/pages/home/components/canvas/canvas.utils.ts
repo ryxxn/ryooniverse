@@ -12,11 +12,8 @@ const throttledEmitMove = throttle(
   50
 );
 
-let isLoopRunning = false;
-
 export function startGameLoop(ctx: CanvasRenderingContext2D) {
-  if (isLoopRunning) return; // 이미 루프 돌고 있으면 중복 방지
-  isLoopRunning = true;
+  console.log('Game loop started');
 
   function loop() {
     updateMyPlayer(getKeys());
@@ -128,8 +125,4 @@ export function setupInput() {
 
 export function getKeys(): Set<string> {
   return keys;
-}
-
-export function stopGameLoop() {
-  isLoopRunning = false;
 }

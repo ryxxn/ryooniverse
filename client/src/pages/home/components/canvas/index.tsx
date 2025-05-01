@@ -3,7 +3,6 @@ import { CANVAS_CONSTANT } from './canvas.constants';
 import {
   loadMap,
   setupInput,
-  stopGameLoop,
   startGameLoop,
   loadCharacterImage,
 } from './canvas.utils';
@@ -42,6 +41,7 @@ export default function CanvasStage() {
   const { setMyCharacter, otherCharacters } = useCanvasStore();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mountRef = useRef(false);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
@@ -49,13 +49,16 @@ export default function CanvasStage() {
 
     const cleanup = setupInput();
 
+    console.log('Canvas mounted', mountRef.current);
+
     Promise.all([loadCharacterImage(data.character), loadMap()]).then(() => {
+      if (mountRef.current) return;
       startGameLoop(ctx);
+      mountRef.current = true;
     });
 
     return () => {
       cleanup();
-      stopGameLoop();
     };
   }, [data]);
 
