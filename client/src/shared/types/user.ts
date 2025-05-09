@@ -11,4 +11,5 @@ export interface ICharacter
   x: number;
   y: number;
   chat?: string | null;
+  chatExpireId?: number | null;
 }
