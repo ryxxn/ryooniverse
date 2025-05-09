@@ -22,6 +22,7 @@ export const useCanvasStore = create<CanvasState>((set, get) => ({
     y: 100,
     character: '1',
     chat: null,
+    chatExpireId: null,
   },
   otherCharacters: [],
 
