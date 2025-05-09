@@ -61,14 +61,25 @@ export const socketService = {
   chat: () => {
     socket.on('chat', (data) => {
       const { id, chat } = data;
-      const { setChat, clearChat } = useCanvasStore.getState();
+      const { myCharacter, setChat, clearChat, setMyCharacter } =
+        useCanvasStore.getState();
+
+      const { chatExpireId } = myCharacter;
 
       setChat(id, chat);
 
+      // 이미 있는 타이머가 있다면 지우기
+      if (chatExpireId) {
+        clearTimeout(chatExpireId);
+      }
+
       // 5초 후 채팅 지우기
-      setTimeout(() => {
+      const timerId = setTimeout(() => {
         clearChat(id);
+        setMyCharacter({ chatExpireId: null });
       }, 5_000);
+
+      setMyCharacter({ chatExpireId: timerId });
     });
   },
   // disconnect
