@@ -28,7 +28,7 @@ const UserName = ({
         transform: 'translateX(-50%) translateY(-50%)',
       }}
     >
-      <div className="bg-black bg-opacity-60 px-2 py-1 rounded-lg">
+      <div className="bg-black bg-opacity-60 px-2 py-1 rounded-lg text-nowrap">
         {username}
       </div>
     </div>
