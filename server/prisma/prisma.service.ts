@@ -4,24 +4,20 @@ import {
   OnModuleDestroy,
   INestApplication,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from './generated/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 @Injectable()
 export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  async onModuleInit() {
-    await this.$connect();
-  }
-
-  async onModuleDestroy() {
-    await this.$disconnect();
-  }
-
-  // Node.js의 종료 이벤트를 사용하여 종료 핸들러 설정
   constructor() {
-    super();
+    const adapter = new PrismaPg({
+      connectionString: process.env.DATABASE_URL!,
+    });
+    super({ adapter });
+
     const exitHandler = async () => {
       console.log('Prisma is disconnecting...');
       await this.$disconnect();
@@ -34,6 +30,14 @@ export class PrismaService
     process.on('SIGINT', exitHandler);
     process.on('SIGTERM', exitHandler);
     process.on('SIGUSR2', exitHandler);
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+  }
+
+  async onModuleDestroy() {
+    await this.$disconnect();
   }
 
   async enableShutdownHook(app: INestApplication) {

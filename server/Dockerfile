@@ -1,26 +1,31 @@
-# Node 기반 이미지
-FROM node:20
+FROM node:20-alpine AS deps
 
-# 작업 디렉토리 설정
 WORKDIR /usr/src/ryooniverse/server
 
-# pnpm 설치
 RUN npm install -g pnpm
 
-# 의존성 설치용 파일 복사
 COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod \
+    && rm -rf \
+        node_modules/.pnpm/prisma@* \
+        node_modules/.pnpm/@prisma+studio-core* \
+        node_modules/.pnpm/@electric-sql+pglite* \
+        node_modules/.pnpm/typescript@* \
+        node_modules/.pnpm/react@* \
+        node_modules/.pnpm/react-dom@* \
+        node_modules/.pnpm/@types+react* \
+        node_modules/.pnpm/@types+react-dom* \
+    && pnpm store prune || true
 
-# 의존성 설치
-RUN pnpm install
 
-# 전체 소스 복사
-COPY . .
+FROM node:20-alpine
 
-# Nest 빌드
-# RUN pnpm build
+WORKDIR /usr/src/ryooniverse/server
 
-# 포트 노출
+COPY --from=deps /usr/src/ryooniverse/server/node_modules ./node_modules
+COPY package.json ./
+COPY dist ./dist
+
 EXPOSE 8777
 
-# 서버 실행
-CMD ["pnpm", "start:prod"]
+CMD ["node", "dist/src/main"]
