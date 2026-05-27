@@ -22,6 +22,8 @@ FROM node:20-alpine
 
 WORKDIR /usr/src/ryooniverse/server
 
+ENV NODE_ENV=production
+
 COPY --from=deps /usr/src/ryooniverse/server/node_modules ./node_modules
 COPY package.json ./
 COPY dist ./dist
