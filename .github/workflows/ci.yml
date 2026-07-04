@@ -1,0 +1,54 @@
+name: CI
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build & push (linux/arm64)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./server        # 모노레포: backend = server 디렉터리
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ghcr.io/ryxxn/ryooniverse-backend:${{ github.sha }}
+            ghcr.io/ryxxn/ryooniverse-backend:main
+          labels: |
+            org.opencontainers.image.source=https://github.com/ryxxn/ryooniverse
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  bump-manifest:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ryxxn/homelab-k3s
+          token: ${{ secrets.HOMELAB_REPO_TOKEN }}
+      - name: Bump image tag & push
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          yq -i '(select(.kind == "Deployment" and .metadata.name == "ryooniverse-backend").spec.template.spec.containers[0].image) = "ghcr.io/ryxxn/ryooniverse-backend:" + strenv(SHA)' ryooniverse/ryooniverse.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ryooniverse/ryooniverse.yaml
+          git diff --cached --quiet || git commit -m "deploy(ryooniverse-backend): ${SHA}"
+          git push
